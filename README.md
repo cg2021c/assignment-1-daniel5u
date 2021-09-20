@@ -4,13 +4,13 @@
 I choose a can as my object because it has a simple shape.
 
 ## Top Front
-![alt text](top-front.jpg)
+![alt text](/img/top-front.jpg)
 
 ## Top Left
-![alt text](top-left.jpg)
+![alt text](/img/top-left.jpg)
 
 ## Top Rear
-![alt text](top-rear.jpg)
+![alt text](/img/top-rear.jpg)
 
 ## Top Right
-![alt text](top-right.jpg)
+![alt text](/img/top-right.jpg)

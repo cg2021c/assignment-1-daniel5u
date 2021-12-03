@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Assignment 1 - Daniel Sugianto - 05111940000075
+        Assignment 1C - Piano Chair - 05111940000075
     </title>
+    <style>
+        canvas {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.5.0/math.js" type="text/javascript"></script>
+    <script src="gl-matrix-min.js" type="text/javascript"></script>
 </head>
-
 <body onload="main()">
-    <canvas id="myCanvas" width="500" height="500">
-        Your browser does not support WebGL application.
-    </canvas>
-    <script src="gl-matrix-min.js"></script>
-    <script src="main.js" type="module"></script>
+    <canvas id="myCanvas" width="1366" height="768"></canvas>
+    <div style="text-align: center"><h2>Press W to move the light up</h2></div>
+    <div style="text-align: center"><h2>Press S to move the light down</h2></div>
+    <div style="text-align: center"><h2>Press A to move the camera to the left</h2></div>
+    <div style="text-align: center"><h2>Press D to move the camera to the right</h2></div>
+    <div style="text-align: center"><h2>Press O to orbit</h2></div>
+    <script src="Js/main.js" type="module"></script>
 </body>
-
 </html>

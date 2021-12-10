@@ -113,6 +113,7 @@ function main() {
         uniform mat3 uNormalModel;
         uniform vec3 uSpecularConstant; // Represents the light color
         uniform vec3 uViewerPosition;
+        uniform float uLightOn;
         
         void main() {
             
@@ -135,10 +136,10 @@ function main() {
             float cosPhi = max(dot(normalizedViewer, normalizedReflector), 0.);
             
             // Calculate the phong reflection effect
-            if (cosTheta > 0.) {
+            if (uLightOn == 1.0 && cosTheta > 0.) {
                 diffuse = uDiffuseConstant * cosTheta;
             }
-            if (cosPhi > 0.) {
+            if (uLightOn == 1.0 && cosPhi > 0.) {
                 specular = uSpecularConstant * pow(cosPhi, vShininessConstant);
             }
             vec3 phong = ambient + diffuse + specular;
@@ -238,6 +239,11 @@ function main() {
     glMatrix.mat4.perspective(perspectiveMatrix, Math.PI/3, 1.0, 0.5, 10.0);
     gl.uniformMatrix4fv(uProjection, false, perspectiveMatrix);
 
+    // LIGHT ON / OFF
+    let uLightOnValue = 1.0;
+    var uLightOn = gl.getUniformLocation(shaderProgram, "uLightOn");
+    gl.uniform1f(uLightOn, uLightOnValue);
+
     // Interactive graphics with keyboard
     var camera = [0.0, 0.0, 3.0];
     var cameraLookAt = [0.0, 0.0, 0.0];
@@ -251,7 +257,21 @@ function main() {
     );
 
     gl.uniformMatrix4fv(uView, false, viewMatrix);
+
     
+    function onKeydown(event) {
+        // A
+        if (event.keyCode == 32) {
+            if(uLightOnValue == 1.0) {
+                uLightOnValue = 0.0;
+            } else if(uLightOnValue == 0.0) {
+                uLightOnValue = 1.0;
+            }
+            gl.uniform1f(uLightOn, uLightOnValue);
+        }
+    }
+    document.addEventListener("keydown", onKeydown);
+
     // SPECULAR
     var uSpecularConstant = gl.getUniformLocation(shaderProgram, "uSpecularConstant");
     var uViewerPosition = gl.getUniformLocation(shaderProgram, "uViewerPosition");

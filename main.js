@@ -245,47 +245,6 @@ function main() {
 
     gl.uniformMatrix4fv(uView, false, viewMatrix);
     
-    function onKeydown(event) {
-        // A
-        if (event.keyCode == 65) {
-            camera[0] -= 0.1;
-            cameraLookAt[0] -= 0.1;
-            glMatrix.mat4.lookAt(
-                viewMatrix,
-                camera,
-                cameraLookAt,
-                [0.0, 1.0, 0.0]
-            );
-        }
-        // W
-        else if (event.keyCode == 87) {
-            for(let i = lightCube.vertexStartIndex; i <= lightCube.vertexEndIndex; i += 10) {
-                vertices[i + 1] += 0.1;
-            }
-            lightPosition[1] += 0.1;
-        }
-        // D
-        else if (event.keyCode == 68) {
-            camera[0] += 0.1;
-            cameraLookAt[0] += 0.1;
-            glMatrix.mat4.lookAt(
-                viewMatrix,
-                camera,
-                cameraLookAt,
-                [0.0, 1.0, 0.0]
-            );
-        }
-        // S
-        else if (event.keyCode == 83) {
-            for(let i = lightCube.vertexStartIndex; i <= lightCube.vertexEndIndex; i += 10) {
-                vertices[i + 1] -= 0.1;
-            }
-            lightPosition[1] -= 0.1;
-        }
-        gl.uniformMatrix4fv(uView, false, viewMatrix);
-    }
-    document.addEventListener("keydown", onKeydown);
-    
     // SPECULAR
     var uSpecularConstant = gl.getUniformLocation(shaderProgram, "uSpecularConstant");
     var uViewerPosition = gl.getUniformLocation(shaderProgram, "uViewerPosition");
@@ -295,13 +254,6 @@ function main() {
     var uModel = gl.getUniformLocation(shaderProgram, "uModel");
 
     function render() {
-        // Update vertices
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-
-        // Update light position
-        gl.uniform3fv(uLightPosition, lightPosition);
-
         var modelMatrix = glMatrix.mat4.create();
         gl.uniformMatrix4fv(uModel, false, modelMatrix);
         var normalModelMatrix = glMatrix.mat3.create();

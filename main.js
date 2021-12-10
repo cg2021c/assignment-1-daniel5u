@@ -51,11 +51,18 @@ function main() {
         {x: -0.75, y: 0.0, z: 0.0},
         {shininess: 8}
     )
+    let plane = new Cuboid(
+        {x: 0.0, y: -0.775, z: 0.0},
+        {length: 20.0, height: 0.001, width: 20.0}, // 20 x 20
+        {r: 7, g: 80, b: 117}, // #075075
+        {shininess: 10}
+    );
     
     // Add objects
     addObject(vertices, indices, lightCube);
     addObject(vertices, indices, leftPianoChair);
     addObject(vertices, indices, rightPianoChair);
+    addObject(vertices, indices, plane);
 
     // Create a linked-list for storing the vertices data
     var vertexBuffer = gl.createBuffer();

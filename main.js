@@ -308,8 +308,12 @@ function main() {
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousemove', onMouseMove);
 
+    // CAMERA VARIABLES
+    let degree = 90;
+    let orbitRadius = 3.0;
+
     // Interactive graphics with keyboard
-    var camera = [0.0, 0.0, 3.0];
+    var camera = [0.0, 0.0, orbitRadius];
     var cameraLookAt = [0.0, 0.0, 0.0];
     var uView = gl.getUniformLocation(shaderProgram, "uView");
     var viewMatrix = glMatrix.mat4.create();
@@ -322,9 +326,8 @@ function main() {
 
     gl.uniformMatrix4fv(uView, false, viewMatrix);
 
-    
     function onKeydown(event) {
-        // A
+        // Space
         if (event.keyCode == 32) {
             if(uLightOnValue == 1.0) {
                 uLightOnValue = 0.0;
@@ -333,6 +336,95 @@ function main() {
             }
             gl.uniform1f(uLightOn, uLightOnValue);
         }
+        // A
+        else if (event.keyCode == 65) {
+            for(let i = lightCube.vertexStartIndex; i <= lightCube.vertexEndIndex; i += 10) {
+                vertices[i] -= 0.1;
+            }
+            lightPosition[0] -= 0.1;
+        }
+        // W
+        else if (event.keyCode == 87) {
+            for(let i = lightCube.vertexStartIndex; i <= lightCube.vertexEndIndex; i += 10) {
+                vertices[i + 2] -= 0.1;
+            }
+            lightPosition[2] -= 0.1;
+        }
+        // D
+        else if (event.keyCode == 68) {
+            for(let i = lightCube.vertexStartIndex; i <= lightCube.vertexEndIndex; i += 10) {
+                vertices[i] += 0.1;
+            }
+            lightPosition[0] += 0.1;
+        }
+        // S
+        else if (event.keyCode == 83) {
+            for(let i = lightCube.vertexStartIndex; i <= lightCube.vertexEndIndex; i += 10) {
+                vertices[i + 2] += 0.1;
+            }
+            lightPosition[2] += 0.1;
+        }
+        // UP
+        else if(event.keyCode == 38) {
+            orbitRadius -= 0.1;
+            let sin = Math.sin(degree * Math.PI / 180);
+            let cos = Math.cos(degree * Math.PI / 180);
+            camera[0] = orbitRadius * cos;
+            camera[2] = orbitRadius * sin;
+            console.log(camera);
+            glMatrix.mat4.lookAt(
+                viewMatrix,
+                camera,
+                cameraLookAt,
+                [0.0, 1.0, 0.0]
+            );
+        }
+        // DOWN
+        else if(event.keyCode == 40) {
+            orbitRadius += 0.1;
+            let sin = Math.sin(degree * Math.PI / 180);
+            let cos = Math.cos(degree * Math.PI / 180);
+            camera[0] = orbitRadius * cos;
+            camera[2] = orbitRadius * sin;
+            console.log(camera);
+            glMatrix.mat4.lookAt(
+                viewMatrix,
+                camera,
+                cameraLookAt,
+                [0.0, 1.0, 0.0]
+            );
+        }
+        // LEFT
+        else if(event.keyCode == 37) {
+            degree += 1.0;
+            let sin = Math.sin(degree * Math.PI / 180);
+            let cos = Math.cos(degree * Math.PI / 180);
+            camera[0] = orbitRadius * cos;
+            camera[2] = orbitRadius * sin;
+            console.log(camera);
+            glMatrix.mat4.lookAt(
+                viewMatrix,
+                camera,
+                cameraLookAt,
+                [0.0, 1.0, 0.0]
+            );
+        }
+        // RIGHT
+        else if(event.keyCode == 39) {
+            degree -= 1.0;
+            let sin = Math.sin(degree * Math.PI / 180);
+            let cos = Math.cos(degree * Math.PI / 180);
+            camera[0] = orbitRadius * cos;
+            camera[2] = orbitRadius * sin;
+            console.log(camera);
+            glMatrix.mat4.lookAt(
+                viewMatrix,
+                camera,
+                cameraLookAt,
+                [0.0, 1.0, 0.0]
+            );
+        }
+        gl.uniformMatrix4fv(uView, false, viewMatrix);
     }
     document.addEventListener("keydown", onKeydown);
 
@@ -345,6 +437,13 @@ function main() {
     var uModel = gl.getUniformLocation(shaderProgram, "uModel");
 
     function render() {
+        // Update vertices
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+        // Update light position
+        gl.uniform3fv(uLightPosition, lightPosition);
+
         var modelMatrix = glMatrix.mat4.create();
         glMatrix.mat4.multiply(modelMatrix, modelMatrix, rotationMatrix);
         gl.uniformMatrix4fv(uModel, false, modelMatrix);
